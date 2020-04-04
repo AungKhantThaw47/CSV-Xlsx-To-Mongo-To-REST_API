@@ -1,55 +1,55 @@
 const mongoose = require("mongoose");
 const COVID19Schema = new mongoose.Schema({
 __EMPTY:{
-type:Number,
+type: String,
 },
 SR:{
-type:String,
+type: String,
 },
 Township:{
-type:String,
+type: String,
 },
 Hospital:{
-type:String,
+type: String,
 },
 HosPt:{
-type:Number,
+type: String,
 },
 PUI:{
-type:Number,
+type: String,
 },
 Suspected:{
-type:Number,
+type: String,
 },
 M:{
-type:Number,
+type: String,
 },
 F:{
-type:Number,
+type: String,
 },
 Child:{
-type:Number,
+type: String,
 },
 Adult:{
-type:Number,
+type: String,
 },
 Lab_Neg:{
-type:Number,
+type: String,
 },
 Confirmed:{
-type:Number,
+type: String,
 },
 Pending:{
-type:Number,
+type: String,
 },
 DC:{
-type:Number,
+type: String,
 },
 Latitude:{
-type:Number,
+type: String,
 },
 Longitude:{
-type:Number,
+type: String,
 },
 },{
 collection: 'COVID19'

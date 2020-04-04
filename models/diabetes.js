@@ -1,31 +1,31 @@
 const mongoose = require("mongoose");
 const diabetesSchema = new mongoose.Schema({
 Pregnancies:{
-type:String,
+type: String,
 },
 Glucose:{
-type:String,
+type: String,
 },
 BloodPressure:{
-type:String,
+type: String,
 },
 SkinThickness:{
-type:String,
+type: String,
 },
 Insulin:{
-type:String,
+type: String,
 },
 BMI:{
-type:String,
+type: String,
 },
 DiabetesPedigreeFunction:{
-type:String,
+type: String,
 },
 Age:{
-type:String,
+type: String,
 },
 Outcome:{
-type:String,
+type: String,
 },
 },{
 collection: 'diabetes'

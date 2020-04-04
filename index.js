@@ -68,13 +68,26 @@ app.get('/loadModule',function(req,res)
       var name = element.slice(0, -3);
       console.log(element);
       moudlesName.push(name);
-      modules.push({name:require(__dirname+"/models/"+element)});
+      modules.push(require(__dirname+"/models/"+element));
     }
     console.log("Module Name");
     console.log(moudlesName);
     console.log("Module");
     console.log(modules);
     
+  });
+  res.redirect('/');
+});
+
+app.get('/loadData',function(req,res)
+{
+  fs.readdir(__dirname + '/uploads', function (error, files) {
+    var totalFiles = files.length;
+    console.log(totalFiles);
+    files.forEach(element => {
+      console.log(element);
+      chooseFileTypeData(element);
+    });
   });
   res.redirect('/');
 });
@@ -91,6 +104,18 @@ app.get('/testXlsx', function (req, res) {
   res.redirect('/');
 });
 
+app.get('/testCSVData', function (req, res) {
+  var filename = "diabetes.csv";
+  chooseFileTypeData(filename);
+  res.redirect('/');
+});
+
+app.get('/testXlsxData', function (req, res) {
+  var filename = "COVID 19 Detail,UIT.xlsx";
+  chooseFileTypeData(filename);
+  res.redirect('/');
+});
+
 async function chooseFileType(filename) {
   var Data;
   var csv = ".csv";
@@ -102,6 +127,20 @@ async function chooseFileType(filename) {
   else if (filename.includes(xlsx)) {
     console.log("Xlsx");
     Data = await Xlsxreader(filename);
+  }
+}
+
+async function chooseFileTypeData(filename) {
+  var Data;
+  var csv = ".csv";
+  var xlsx = ".xlsx";
+  if (filename.includes(csv)) {
+    console.log("CSV");
+    Data = await CSVDatareader(filename);
+  }
+  else if (filename.includes(xlsx)) {
+    console.log("Xlsx");
+    Data = await XlsxDatareader(filename);
   }
 }
 
@@ -124,7 +163,8 @@ async function CSVreader(filename) {
       }
     }
     filename = filename.slice(0, -4);
-    CreatingModelJs(filename, result, type);
+    //CreatingModelJs(filename, result, type);
+    CreatingModelJsNoParamType(filename,result);
   });
 }
 
@@ -147,7 +187,8 @@ async function Xlsxreader(filename) {
       }
     }
     filename = filename.slice(0, -5);
-    CreatingModelJs(element, result, type);
+    //CreatingModelJs(element, result, type);
+    CreatingModelJsNoParamType(element,result);
   });
 }
 
@@ -168,6 +209,23 @@ function CreatingModelJs(filename, params, paramsType) {
   writeStream.end();
 }
 
+function CreatingModelJsNoParamType(filename, params) {
+  filename = filename.split(" ").join("");
+  var writeStream = fs.createWriteStream("./models/" + filename + ".js");
+  writeStream.write("const mongoose = require(\"mongoose\");\n");
+  writeStream.write("const " + filename + "Schema = new mongoose.Schema({\n");
+  for (let i = 0; i < params.length; i++) {
+    writeStream.write(params[i] + ":{\n");
+    writeStream.write("type: String,\n");
+    writeStream.write("},\n");
+  }
+  writeStream.write("},{\n");
+  writeStream.write("collection: \'" + filename + "\'\n");
+  writeStream.write("});\n");
+  writeStream.write("module.exports = mongoose.model(\'" + filename + "\'," + filename + "Schema)");
+  writeStream.end();
+}
+
 async function CSVDatareader(filename) {
   var Data;
   fs.readFile(__dirname + "/uploads/" + filename, async (err, data) => {
@@ -175,8 +233,21 @@ async function CSVDatareader(filename) {
       console.error(err);
       return
     }
+    filename = filename.split(" ").join("");
+    filename = filename.slice(0,-4);
     Data = await neatCsv(data);
-    
+    Data.forEach(async element => {
+      var index = moudlesName.indexOf(filename);
+      var Uploadmodule = modules[index];
+      var Uploadvariable = new Uploadmodule(
+        element
+      );
+      try {
+        await Uploadvariable.save();
+      } catch (err) {
+        console.log(err);
+      }
+    });
   });
 }
 
@@ -185,20 +256,20 @@ async function XlsxDatareader(filename) {
   var workbook = xlsx.readFile(__dirname + "/uploads/" + filename)
   var sheet_name_list = workbook.SheetNames;
   sheet_name_list.forEach(element => {
-    console.log(element);
     Data = xlsx.utils.sheet_to_json(workbook.Sheets[element]);
-    console.log(Data[0]);
-    var result = [];
-    var type = [];
-    var obj = Data[0];
-    for (var p in obj) {
-      if (obj.hasOwnProperty(p)) {
-        type.push(jsUcfirst(typeof (obj[p])));
-        result.push(p);
+    element = element.split(" ").join("");
+    Data.forEach(async ele => {
+      var index = moudlesName.indexOf(element);
+      var Uploadmodule = modules[index];
+      var Uploadvariable = new Uploadmodule(
+        ele
+      );
+      try {
+        await Uploadvariable.save();
+      } catch (err) {
+        console.log(err);
       }
-    }
-    filename = filename.slice(0, -5);
-    CreatingModelJs(element, result, type);
+    });
   });
 }
 

@@ -1,28 +1,28 @@
 const mongoose = require("mongoose");
 const HospitalwithphonenumberSchema = new mongoose.Schema({
 Region:{
-type:String,
+type: String,
 },
 Township:{
-type:String,
+type: String,
 },
 HospitalName:{
-type:String,
+type: String,
 },
 Bed:{
-type:Number,
+type: String,
 },
 Latitude:{
-type:Number,
+type: String,
 },
 Longitude:{
-type:Number,
+type: String,
 },
 Coordinates:{
-type:String,
+type: String,
 },
 PhoneNumber:{
-type:String,
+type: String,
 },
 },{
 collection: 'Hospitalwithphonenumber'
