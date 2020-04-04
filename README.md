@@ -4,8 +4,8 @@ Both CSV and Xlsx files to mongo database model dynamically by uploading files a
 
 # Prerequisite
 
-- Need to install mongoDB
-- Need to install node.js
+- Need to install mongoDB  (https://www.mongodb.com/download-center/community)
+- Need to install node.js  (https://nodejs.org/en/)
 
 # Usuage
 
