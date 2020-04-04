@@ -19,9 +19,11 @@ Both CSV and Xlsx files to mongo database model dynamically by uploading files a
 # To Test CSV file type
 
 - call http://localhost:3000/testCSV
+- call http://localhost:3000/loadModule
 - call http://localhost:3000/testCSVData
 
 # To Test Xlsx file type
 
 - call http://localhost:3000/testXlsx
+- call http://localhost:3000/loadModule
 - call http://localhost:3000/testXlsxData
