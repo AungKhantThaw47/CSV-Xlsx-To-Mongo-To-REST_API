@@ -9,6 +9,7 @@ Both CSV and Xlsx files to mongo database model dynamically by uploading files a
 
 # Usuage
 
+- go to project folder
 - npm install
 - node index.js
 - call http://localhost:3000/
